@@ -1,0 +1,7 @@
+#!/bin/bash
+
+MSG=`cat -`
+
+echo $MSG | base64 -d > /tmp/rsa_tmp
+
+echo `openssl rsautl -decrypt -inkey ~/.ssh/id_rsa < /tmp/rsa_tmp`
