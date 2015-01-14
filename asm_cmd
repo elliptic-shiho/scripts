@@ -14,8 +14,8 @@ class AsmConsole(code.InteractiveConsole):
     if "quit" in line:
       sys.exit(0)
 
-    open("temp.s", "w").write("[BITS 32]\n" + line.replace(";", "\n"))
-    p = Popen(["nasm", "temp.s"], stdout=PIPE)
+    open("/tmp/temp.s", "w").write("[BITS 32]\n" + line.replace(";", "\n"))
+    p = Popen(["nasm", "/tmp/temp.s"], stdout=PIPE)
     while 1:
       l = p.stdout.readline()
       if not l:
@@ -23,7 +23,7 @@ class AsmConsole(code.InteractiveConsole):
       print l
     p.wait()
 
-    p = Popen(["ndisasm", "-b", "32", "temp"], stdout=PIPE)
+    p = Popen(["ndisasm", "-b", "32", "/tmp/temp"], stdout=PIPE)
     while 1:
       l = p.stdout.readline()
       if not l:

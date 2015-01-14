@@ -16,8 +16,8 @@ class DisasmConsole(code.InteractiveConsole):
       print "Error: Invalid Syntax"
       return
     try:
-      open("temp", "w").write("".join(map(lambda x:struct.pack("B", x), map(lambda x: int(x, 16), lines))))
-      p = Popen(["ndisasm", "-b", "32", "temp"], stdout=PIPE)
+      open("/tmp/temp.disasm", "w").write("".join(map(lambda x:struct.pack("B", x), map(lambda x: int(x, 16), lines))))
+      p = Popen(["ndisasm", "-b", "32", "/tmp/temp.disasm"], stdout=PIPE)
       while 1:
         l = p.stdout.readline()
         if not l:
