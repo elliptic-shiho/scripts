@@ -1,0 +1,41 @@
+#!/usr/bin/python
+from PIL import Image, ImageDraw
+import struct, sys
+pixwh = (8, 8)
+
+division = 16
+
+colors = [(0, 0, 0)] + [(0, y, 0) for x,y in zip(xrange(1, 32), xrange(128, 256))] + [(y, 0, 0) for x,y in zip(xrange(32, 128), xrange(128, 256))] + [(0, 0, y) for x,y in zip(xrange(128, 255), xrange(128, 256))] + [(255, 255, 255)]
+
+if __name__ == "__main__":
+  if len(sys.argv) < 2:
+    sys.stderr.write("Usage: %s [-d division] INFILE OUTFILE\n" % sys.argv[0])
+    sys.exit(1)
+  infile = ""
+  outfile = ""
+
+  x = 1
+  while x < len(sys.argv):
+    if sys.argv[x] == "-d":
+      division = int(sys.argv[x + 1])
+      x += 1
+    elif infile == "":
+      infile = sys.argv[x]
+    elif outfile == "":
+      outfile = sys.argv[x]
+    else:
+      pass
+    x += 1
+
+  data = open(infile, "rb").read()
+  width = division * pixwh[1]
+  height = len(data)/division * pixwh[0]
+
+  im = Image.new("RGB", (width, height))
+  draw = ImageDraw.Draw(im)
+  offset = 0
+  for x in list(data):
+    d = colors[int(x.encode("hex"), 16)]
+    draw.rectangle([((offset % division) * pixwh[1], ((offset / division) * pixwh[0])), ((offset % division + 1) * pixwh[1], ((offset / division + 1) * pixwh[0]))], outline=d, fill=d)
+    offset += 1
+  im.save("%s" % outfile)
