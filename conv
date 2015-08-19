@@ -1,0 +1,15 @@
+#!/usr/bin/python
+
+import sys
+
+if __name__ == "__main__":
+  if len(sys.argv) < 3:
+    sys.stderr.write("Usage: %s [-e | -d] [codec name]\n" % sys.argv[0])
+    sys.exit(1)
+  if sys.argv[1] == "-e":
+    sys.stdout.write(sys.stdin.read().encode(sys.argv[2]))
+  elif sys.argv[1] == "-d":
+    sys.stdout.write(sys.stdin.read().decode(sys.argv[2]))
+  else:
+    sys.stderr.write("Usage: %s [-e | -d] [codec name]\n" % sys.argv[0])
+    sys.exit(2)
