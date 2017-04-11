@@ -1,0 +1,3 @@
+#!/bin/sh
+
+cat -| awk '{sub(/^\s+/, "", $0); sub(/\s+\n?$/, "", $0);print $0}'

@@ -1,0 +1,23 @@
+#!/bin/sh
+
+od -t d1 -A n /dev/stdin    | # convert to digit string
+  tr -Cd "[^0123456789\n ]" | # remove additional character
+  awk '{
+    for (i = 1; i < NF; i++) {
+      if (($i >= 48 && $i <= 57)    || # 0-9
+          ($i >= 65 && $i <= 90)    || # A-Z
+          ($i >= 97 && $i <= 122)   || # a-z
+          $i == 45                  || # -
+          $i == 46                  || # .
+          $i == 95                  || # _
+          $i == 126)                   # ~
+        printf "%c", $i
+      else if ($i == 32)
+        printf "+"
+      else
+        printf "%%%02x", $i
+    }
+  }
+  END {
+    print ""
+  }'

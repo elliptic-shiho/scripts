@@ -1,0 +1,32 @@
+#!/bin/sh
+
+DIR=~/Pictures
+
+save_name=`
+for x in $(ls ${DIR}/cap*.png); do
+  basename $x
+done |
+awk 'BEGIN {
+    num = 0
+  }
+  {
+    n = substr($1, 4);
+    sub(".png", "", n);
+    if((n-0) > (num-0)) {
+      num = n
+    }
+  }
+  END {
+    print "cap" (num+1) ".png"
+  }'
+`
+
+printf "[+] save file name = %s\n" $save_name
+
+#xwd $1 | convert - ${DIR}/${save_name}
+if [ "$1" = "-root" ]; then
+  ARGS="-window root"
+else
+  ARGS=""
+fi
+import $ARGS ${DIR}/${save_name}

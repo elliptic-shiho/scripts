@@ -1,0 +1,13 @@
+#!/bin/sh
+
+choice() {
+  NUM=`head -c 1 /dev/random | od -td1 -A n | tr -Cd "[^0123456789abcdef\n]"`
+  eval 'echo -n $'"`expr $NUM % $# + 1`"
+}
+
+if [ $# -lt 1 ]; then
+  echo "Usage: $0 foo bar baz ..." >&2
+  exit 1
+fi
+
+choice $@
